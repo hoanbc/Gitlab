@@ -1,0 +1,21 @@
+Mục đích: Sử dụng để lưu trữ image docker cho dự án
+1) Truy cập vào file /etc/gitlab/gitlab.rb sửa nội dung
+vi /etc/gitlab/gitlab.rb
+ gitlab_rails['gitlab_default_projects_features_container_registry'] = true
+ 
+ ## Container Registry settings
+ ##! Docs: https://docs.gitlab.com/ee/administration/container_registry.html
+ ################################################################################
+ registry_external_url 'https://gitlab.bos-securities.tech:8888'
+ ### Settings used by GitLab application
+ gitlab_rails['registry_enabled'] = true
+ gitlab_rails['registry_path'] = "/etc/gitlab/gitdocker"
+ 
+ registry['enable'] = true
+ registry_nginx['listen_port'] = 8888
+ 
+2) Tạo thư mục lưu trữ images
+mkdir -p /tec/gitlab/gitdocker
+
+3) Chạy lại cấu hình gitlab
+gitlab-ctl reconfigure

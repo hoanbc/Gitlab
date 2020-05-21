@@ -1,0 +1,37 @@
+Trường hợp sử dụng: Khi muốn sử dụng Active Directory để xác thực tài khoản đặng nhập
+1) Chuẩn bị một tài khoản xác thực trên AD, xác định CN của tài khoản bằng ADSI ( ví dụ ở đây là tài khoản jitsi với đường dẫn CN=LDAP Jitsi - BOS Securities,OU=Tai Khoan,OU=May Chu Noi Bo,OU=Phong May Chu,OU=BOS,DC=bos,DC=local)
+2) Mở port 389 và cho phép Gitlab kết nối tới AD
+3) Truy cập vào file /etc/gitlabgitlab.rb thay đổi các thông tin sau
+ gitlab_rails['ldap_enabled'] = true
+ ##gitlab_rails['prevent_ldap_sign_in'] = false
+
+###! **remember to close this block with 'EOS' below**
+ gitlab_rails['ldap_servers'] = YAML.load <<-'EOS'
+   main: # 'main' is the GitLab 'provider ID' of this LDAP server
+     label: 'BOS Securities'
+     host: '10.200.8.3'
+     port: 389
+     uid: 'sAMAccountName'
+     bind_dn: 'CN=LDAP Jitsi - BOS Securities,OU=Tai Khoan,OU=May Chu Noi Bo,OU=Phong May Chu,OU=BOS,DC=bos,DC=local'
+     password: '12345678'
+     encryption: 'plain' # "start_tls" or "simple_tls" or "plain"
+     active_directory: true
+     allow_username_or_email_login: true
+     lowercase_usernames: true
+     block_auto_created_users: false
+     base: 'OU=BOS,DC=bos,DC=local'
+     user_filter: ''
+EOS
+
+4) Reconfigure lại Gitlab bằng lệnh gitlab-ctl reconfigure
+5) Chạy test LDAP bằng lệnh sudo gitlab-rake gitlab:ldap:check
+[root@gitlab ~]# sudo gitlab-rake gitlab:ldap:check
+Checking LDAP ...
+
+LDAP: ... Server: ldapmain
+LDAP authentication... Success
+LDAP users with access to your GitLab server (only showing the first 100 results)
+        DN: cn=hoan bui cong - bos securities,ou=tai khoan,ou=phong cong nghe thong tin,ou=bos,dc=bos,dc=local   sAMAccountName: hoanbc
+Checking LDAP ... Finished
+
+6) Sau khi chạy lệnh kiểm tra LDAP ở bước 5 thành công tiến hành truy cập Gitlab ở trên web với thông tin tài khoản LDAP

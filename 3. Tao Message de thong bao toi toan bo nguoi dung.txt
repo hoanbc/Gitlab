@@ -1,0 +1,11 @@
+Trường hợp sử dụng: Khi muốn thông báo tới toàn bộ người sử dụng về một nội dung nào đó
+1) Truy cập vào trang quản trị Gitlab mục Admin Area
+2) Vào phần Message
+3) Điền các thông tin tương ứng vào phần Broadcast Messages
+	- Message: nội dung thông báo
+	- Type: Banner ( thông báo trên cùng màn hình )
+			Notification ( thông báo dưới góc màn hình )
+	- Target Path: đường dẫn nơi xuất hiện thông báo ( mặc định không điền gì thì là tất cả )
+	- Start at (UTC): thời gian bắt đầu
+	- Ends at (UTC): thời gian kết thúc
+4) Nhấn vào Add broadcast message

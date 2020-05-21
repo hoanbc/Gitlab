@@ -1,0 +1,37 @@
+Mục đích: cài đặt gitlab bản communication edition
+1) Mở firewall cho port 80 và 443
+ sudo firewall-cmd --permanent --add-service=http
+ sudo firewall-cmd --permanent --add-service=https
+ sudo systemctl reload firewalld
+
+2) Thêm repo của Gitlab
+ curl -sS https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.rpm.sh | sudo bash
+
+3) Cài đặt Gitlab
+ sudo EXTERNAL_URL="https://gitlab.bos-securities.tech" dnf install -y gitlab-ce
+
+4) Chỉnh sửa lại time-zone
+ vi /etc/gitlab/gitlab.rb
+ gitlab_rails['time_zone'] = 'Asia/Ho_Chi_Minh'
+
+5) Chỉnh sửa lại ssl và bắt buộc người dùng chuyển sang sử dụng https
+ vi /etc/gitlab/gitlab.rb
+ nginx['redirect_http_to_https'] = true
+ nginx['ssl_certificate'] = "/etc/gitlab/trusted-certs/cert.pem"
+ nginx['ssl_certificate_key'] = "/etc/gitlab/trusted-certs/privkey.pem"
+ 
+6) Chỉnh nơi lưu dữ liệu Repo
+mkdir -p /etc/gitlab/gitdata
+
+vi /etc/gitlab/gitlab.rb
+ git_data_dirs({
+   "default" => {
+     "path" => "/etc/gitlab/gitdata"
+    }
+ })
+ 
+7) Chạy lệnh xác nhận cấu hình mới
+gitlab-ctl reconfigure
+
+8) Xác định trạng thái các dịch vụ
+gitlab-ctl status

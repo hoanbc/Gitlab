@@ -1,0 +1,21 @@
+Mục đích: Sử dụng Docker để test CI/CD
+1) Cài đặt Repo
+curl -L https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.rpm.sh | sudo bash        (Lưu ý hiện tại mới chỉ hỗ trợ rới bản Centos 7)
+
+2) Cài đặt Runner-Gitlab
+sudo dnf update -y
+sudo dnf install -y gitlab-runner
+
+3) Truy cập vào Group - Settings - CI/CD - Runners hoặc Project - Settings - CI/CD - Runner để lấy Token
+Ví dụ token ở đây là ypDMsPoEevULpVuNTh8v
+
+4) Đăng ký Runner-Gitlab với Gitlab
+sudo gitlab-runner register -n \
+  --url https://gitlab.bos-securities.tech \
+  --registration-token ypDMsPoEevULpVuNTh8v \
+  --executor docker \
+  --description "GitLab CI Runner with privileged mode" \
+  --docker-image "docker:stable" \
+  --docker-privileged
+  
+5) Kiểm tra lại phần Runner của CI/CD nếu đã xuất hiện Runner và báo trạng thái active thì cấu hình đã thành công

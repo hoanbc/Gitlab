@@ -1,0 +1,28 @@
+Mục đích: Thực hiện khôi phục lại dữ liệu hệ thống hoặc chuyển dữ liệu sang máy chủ khác
+1) Cài đặt Gitlab nếu như chưa có
+2) Copy thư dữ liệu backup vào thứ mục /tmp
+cp 1589181750_2020_05_11_12.10.3_gitlab_backup.tar /tmp
+cp gitlab_config_1589182059_2020_05_11.tar /tmp
+tar -xvf /tmp/gitlab_config_1589182059_2020_05_11.tar
+
+3) Chuyển quyền cho file backup
+sudo chown git.git /tmp/1589181750_2020_05_11_12.10.3_gitlab_backup.tar
+
+4) Dừng các dịch vụ cần thiết
+sudo gitlab-ctl stop unicorn
+sudo gitlab-ctl stop puma
+sudo gitlab-ctl stop sidekiq
+
+5) Thực hiện khôi phục các file cấu hình
+cp tmp/etc/gitlab/* /etc/gitlab/
+
+6) Thực hiện khôi phục databases
+sudo gitlab-backup restore BACKUP=/tmp/1589181750_2020_05_11_12.10.3
+Chọn Yes khi được hỏi
+
+7) Chạy lại cấu hình Gitlab và đợi từ 5 tới 10 phút để dịch vụ khởi động lại
+sudo gitlab-ctl reconfigure
+sudo gitlab-ctl restart
+
+8) Kiểm tra hệ thống dữ liệu
+sudo gitlab-rake gitlab:check SANITIZE=true
