@@ -1,0 +1,3 @@
+Fix: Url is blocked: Requests to the local network are not allowed
+
+Step 1: Menu -> Admin -> Settings -> Network -> Outbound requests -> Allow requests to the local network from web hooks and services -> IP of jenkins -> Save
