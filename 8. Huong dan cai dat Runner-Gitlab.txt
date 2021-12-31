@@ -19,3 +19,10 @@ sudo gitlab-runner register -n \
   --docker-privileged
   
 5) Kiểm tra lại phần Runner của CI/CD nếu đã xuất hiện Runner và báo trạng thái active thì cấu hình đã thành công
+
+Nếu sử dụng docker làm runner thì tạo như sau:
+  docker run -d --name gitlab-runner1 --restart always \
+     -v /srv/gitlab-runner/config:/etc/gitlab-runner \
+     -v /var/run/docker.sock:/var/run/docker.sock \
+     -v /etc/hosts:/etc/hosts \
+     gitlab/gitlab-runner:latest
