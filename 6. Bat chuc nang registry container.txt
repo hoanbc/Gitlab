@@ -9,13 +9,15 @@ vi /etc/gitlab/gitlab.rb
  registry_external_url 'https://gitlab.bos-securities.tech:8888'
  ### Settings used by GitLab application
  gitlab_rails['registry_enabled'] = true
- gitlab_rails['registry_path'] = "/etc/gitlab/gitdocker"
+ gitlab_rails['registry_path'] = "/otp/registry"
  
  registry['enable'] = true
- registry_nginx['listen_port'] = 8888
+ registry_nginx['listen_port'] = 443
+ registry_nginx['ssl_certificate'] = "/etc/gitlab/trusted-certs/fullchain.pem"
+ registry_nginx['ssl_certificate_key'] = "/etc/gitlab/trusted-certs/privkey.pem"
  
 2) Tạo thư mục lưu trữ images
-mkdir -p /tec/gitlab/gitdocker
+mkdir -p /opt/registry
 
 3) Chạy lại cấu hình gitlab
 gitlab-ctl reconfigure
