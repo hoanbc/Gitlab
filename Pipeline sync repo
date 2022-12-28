@@ -1,0 +1,11 @@
+sync-with-gitlab:
+  image: bitnami/git:latest
+  before_script:
+    - cd ~
+    - git init
+    - git config --global user.name "devops"
+    - git config --global user.email "devops@testvn.click"
+  script:
+    - git remote  add origin https://oauth2:glpat-111_2aCMtg1PT2Kih@gitlab.com/testvn-click-devops/container/mobile-app.git
+    - git pull origin main
+    - git push https://root:glpat-3DRw1kV111rdKR8reJE-P@gitlab.testvn.click/devops/source-code/mobile-app.git HEAD:master
