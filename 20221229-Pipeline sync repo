@@ -1,3 +1,4 @@
+###Use runner sync repo from gitlab public
 sync-with-gitlab:
   image: bitnami/git:latest
   before_script:
@@ -21,3 +22,6 @@ sync-with-gitlab:
     - git remote  add origin https://$TOKEN_GITLAB_PUBLIC@$REPO_GITLAB_PUBLIC
     - git pull origin main
     - git push https://$TOKEN_GITLAB_PRIVATE@$REPO_GITLAB_PRIVATE HEAD:$BRANCH_PUSH
+
+Trigger Pipeline from curl
+curl -L -X POST 'https://gitlab.testvn.click/api/v4/projects/4/trigger/pipeline?ref=main&token=glptt-2087a4cb455221110e733a2dcd9da396dc8fc494'
