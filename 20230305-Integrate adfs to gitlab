@@ -1,0 +1,49 @@
+###On Gitlab
+vim /etc/gitlab/gitlab.rb
+gitlab_rails['omniauth_allow_single_sign_on'] = ['saml']
+gitlab_rails['omniauth_block_auto_created_users'] = false
+gitlab_rails['omniauth_auto_link_saml_user'] = true
+gitlab_rails['omniauth_providers'] = [
+  {
+    name: 'saml',
+    args: {
+             assertion_consumer_service_url: 'https://gitlab.testvn.click/users/auth/saml/callback',
+             idp_cert_fingerprint: '9C:2C:D3:35:15:AF:00:BF:EE:3B:23:41:4C:C5:C8:02:99:24:92:FD',
+             idp_sso_target_url: 'https://adfs.testvn.local/adfs/ls',
+             issuer: 'https://gitlab.testvn.click',
+             name_identifier_format: 'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent'
+           },
+    label: 'ADFS'
+  }
+]
+
+gitlab-ctl reconfigure
+
+idp_cert_fingerprint: -> https://adfs.testvn.local/FederationMetadata/2007-06/FederationMetadata.xml -> 
+<KeyInfo xmlns="http://www.w3.org/2000/09/xmldsig#">
+<X509Certificate>MIIE5DCCAsygAwIBAgIQXPTbSfhTnrRH4iO1TlAWhjANBgkqhkiG9w0BAQsFADAuMSwwKgYDVQQDEyNBREZTIEVuY3J5cHRpb24gLSBhZGZzLnRlc3R2bi5sb2NhbDAeFw0yMzAzMDQxMDA5NThaFw0yNDAzMDMxMDA5NThaMC4xLDAqBgNVBAMTI0FERlMgRW5jcnlwdGlvbiAtIGFkZnMudGVzdHZuLmxvY2FsMIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAsK3bGYNQPbEPnO85dnEIeNcC9sijgTm+KPlnJeMYeBGzN68XXRf6CMke5gs7bBSqMcRn9YFDuax7xqxmsx4oFHCfBZQl8Xv9VsB1xjeoGhKIGvs4rFv+9nYJmfg/Sz7sanL8QT2wyTsD1x1F8CyJWLt6ohyYgCCYLq0oSekU3dQwEtM3SXk7pKnYP8IfLqutv9ZXSZZqEEL1wL3B6IoVYMEESX4QJxh1Poqsr2whoPEhqKyFnyHpzKpB3EYk9LQigtYvNVhfgsQXVVdOXdF7/7EoeYz/ttWcLS3AZtrbV+lbuI2ZTsXU6O1Kil6atKMYBomg9bgWXqjcn+JG/9XKqY1B8gbH5U93o5kySWgOIyXz2NMXlCvwuG45HnbVVapuRJqAqgf9X4b4MEs77YVTa/KzIrZ+LXDTkqo7t/yOskZ5NRaplp65KKEqFGNuz3JoTu+G5ht5agmgHnR+eHABtO5aLE3qa84hW8/+MQ53ylvfD16L0GqxnXTIzksfAtiKM2SoIQpLPD4CiDloasqhfZ91Csr53V5luoLRXPw024h2Enc8l8eW52tXb+sWFoKjJX61DCOkxoEJJCxeDV5KoldZwd0AH5T60wFDYR9xOhGIrmN9n0zXprmaYt88AX1jHEexF9JdSGoxgg1KTd1Df9vLiw42YAseCr/ktf26l60CAwEAATANBgkqhkiG9w0BAQsFAAOCAgEAmaQmU2j3UDUNTxz/aBRsWuoQqAyrQmEddRU8B6xpYDCRIjjMlfqDjgD+UqZUsuLGMwPXm/RjvuiJZKi0yI5MdqCAMfwYsRDMn4uub9ODdvLIYE57w5MkcJvuqZ28ek6HBXN3Gl4L3fQKZJ0CQh6N7om6wypHJiD4ttqGdMMavr9uMw/T+I6F3fmWtOiP1bmZTlsLYxurNZ4wMKXtvw7nK6GyUKOwEN0KIpuwLBE6OzCttETLP+zBpqgNHk12wXWCvWsAlTLQNbXEZvCPGgP81/afu/apxqjDmbXMUPjDCeiaHTDJpubk4ZaFsinluM7u8mDST+k6RvewmwX0efj6lvBylK3ZSy+VP8hPOQNebJTrUsiSKnahpCnFDTSfhdFQY8W7b2a2A+96ldRgPInQy6qP0jqJ4CRZFydLoQiVDuzpCnTSPC/sxQG5kT9rqQcGiBupcIno+T1srvjjkPK9nID/++joOd3DRAOW0E4w1PulxitwyXXrnKJXxkRugRxZemdihpQ+GcLdW9284qvrwelbom1VIU7zjwLYUXpVs14NsQFhGU0lrKNuEQJVbMO4KUCV2JrPP53Qskyx0pWy5ZBgd4iko6bal4OSsgqfV82/WRMjimCWrmfHgrPD4yJnx0hDoQmTscB5nkLG2DfTT2qHX0KhJMotVA1SDWsdjvw=</X509Certificate>
+<KeyInfo xmlns="http://www.w3.org/2000/09/xmldsig#">
+
+-> Copy content on <X509Certificate> ... </X509Certificate> ->  https://redkestrel.co.uk/products/decoder/ -> find SHA1 Fingerprint	9C:2C:D3:35:15:AF:00:BF:EE:3B:23:41:4C:C5:C8:02:99:24:92:FD (it is example)
+
+###ADFS
+Copy content on https://gitlab.testvn.click/users/auth/saml/metadata to metadata.xml -> ADFS -> Relying Party Trust ->
+Add Relying Party Trust Wizard -> Claims aware -> Import data about the relying party form a file (metadata.xml) ->
+Display name: Gitlab -> Next -> Next -> Finish -> Edit Claim Issuance Policy -> 
+Add rule ->
+1) Send LDAP attributes as claims -> Claim rule name: Send to AD -> Attribute store: Active Directory
+E-Mail-Address  | email
+Given-Name  | firstname
+Surname | lastname
+Display-Name  | Name
+
+2) Transform an incoming claim -> Claim rule name: Transform email to nameid ->
+Incoming claim type: email
+Outgoing claim type: Name ID
+Outgoing name ID format: Persistent Identifier
+
+###AD
+User must have setting attributes email
+
+
+-> Check service
