@@ -1,0 +1,31 @@
+docker run -d --name gitlab-runner01 --restart always -v /var/run/docker.sock:/var/run/docker.sock -v gitlab-runner01:/etc/gitlab-runner -p 8093:8093 gitlab/gitlab-runner:latest 
+docker run --rm -it -v gitlab-runner01:/etc/gitlab-runner gitlab/gitlab-runner:latest register
+
+.gitlab-ci.yml
+image: busybox:latest
+before_script:
+  - echo "Before script section"
+  - echo "For example you might run an update here or install a build dependency"
+  - echo "Or perhaps you might print out some debugging details"
+after_script:
+  - echo "After script section"
+  - echo "For example you might do some cleanup here"
+build1:
+  stage: build
+  script:
+    - echo "Do your build here"
+test1:
+  stage: test
+  script:
+    - echo "Do a test here"
+    - echo "For example run a test suite"
+test2:
+  stage: test
+  script:
+    - echo "Do another parallel test here"
+    - echo "For example run a lint test"
+deploy1:
+  stage: deploy
+  script:
+    - echo "Do your deploy here"
+  environment: production
