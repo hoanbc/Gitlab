@@ -1,6 +1,7 @@
 ###On Gitlab
 vim /etc/gitlab/gitlab.rb
 gitlab_rails['omniauth_allow_single_sign_on'] = ['saml']
+#gitlab_rails['omniauth_allow_single_sign_on'] = ['saml',['saml_2']
 gitlab_rails['omniauth_block_auto_created_users'] = false
 gitlab_rails['omniauth_auto_link_saml_user'] = true
 gitlab_rails['omniauth_providers'] = [
@@ -8,12 +9,25 @@ gitlab_rails['omniauth_providers'] = [
     name: 'saml',
     args: {
              assertion_consumer_service_url: 'https://gitlab.testvn.click/users/auth/saml/callback',
+             strategy_class: 'OmniAuth::Strategies::SAML',
              idp_cert_fingerprint: '9C:2C:D3:35:15:AF:00:BF:EE:3B:23:41:4C:C5:C8:02:99:24:92:FD',
              idp_sso_target_url: 'https://adfs.testvn.local/adfs/ls',
              issuer: 'https://gitlab.testvn.click',
              name_identifier_format: 'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent'
            },
-    label: 'ADFS'
+    label: 'ADFS-SAML1'
+  }
+    {
+    name: 'saml_2',
+    args: {
+             assertion_consumer_service_url: 'https://gitlab.testvn.click/users/auth/saml_2/callback',
+             strategy_class: 'OmniAuth::Strategies::SAML',
+             idp_cert_fingerprint: '9C:2C:D3:35:15:AF:00:BF:EE:3B:23:41:4C:C5:C8:02:99:24:92:FD',
+             idp_sso_target_url: 'https://adfs.testvn.local/adfs/ls',
+             issuer: 'https://gitlab.testvn.click',
+             name_identifier_format: 'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent'
+           },
+    label: 'ADFS-SAML2'
   }
 ]
 
