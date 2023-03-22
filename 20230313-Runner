@@ -1,4 +1,4 @@
-docker run -d --name gitlab-runner01 --restart always -v /var/run/docker.sock:/var/run/docker.sock -v gitlab-runner01:/etc/gitlab-runner -p 8093:8093 gitlab/gitlab-runner:latest 
+docker run -d --name gitlab-runner01 --restart always -v /var/run/docker.sock:/var/run/docker.sock -v gitlab-runner01:/etc/gitlab-runner  gitlab/gitlab-runner:latest 
 docker run --rm -it -v gitlab-runner01:/etc/gitlab-runner gitlab/gitlab-runner:latest register
 
 .gitlab-ci.yml
@@ -29,3 +29,7 @@ deploy1:
   script:
     - echo "Do your deploy here"
   environment: production
+  
+  cp Root-CA.crt /var/lib/docker/volumes/gitlab-runner01/_data/certs
+  
+  docker restart gitlab-runner01
